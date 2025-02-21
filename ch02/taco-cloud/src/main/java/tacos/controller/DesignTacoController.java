@@ -1,4 +1,4 @@
-package tacos.web;
+package tacos.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import lombok.extern.slf4j.Slf4j;
-import tacos.Ingredient;
-import tacos.Ingredient.Type;
-import tacos.Taco;
-import tacos.TacoOrder;
+import tacos.model.Ingredient;
+import tacos.model.Ingredient.Type;
+import tacos.model.Taco;
+import tacos.model.TacoOrder;
 
 import javax.validation.Valid;
 
@@ -88,16 +88,6 @@ public class DesignTacoController {
         return "design";
     }
 
-/*
-  @PostMapping
-  public String processTaco(Taco taco,
-  			@ModelAttribute TacoOrder tacoOrder) {
-    tacoOrder.addTaco(taco);
-    log.info("Processing taco: {}", taco);
-
-    return "redirect:/orders/current";
-  }
- */
 
     /* Handles POST requests to /design (annotated with @PostMapping).
 Validates the Taco object using the @Valid annotation and checks for validation errors using the Errors object.

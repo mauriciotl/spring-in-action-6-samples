@@ -18,8 +18,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import tacos.Ingredient.Type;
-import tacos.web.DesignTacoController;
+import tacos.model.Ingredient;
+import tacos.model.Ingredient.Type;
+import tacos.controller.DesignTacoController;
 
 @ExtendWith(SpringExtension.class) // <1>
 @WebMvcTest(DesignTacoController.class)

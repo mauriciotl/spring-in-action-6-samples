@@ -1,4 +1,4 @@
-package tacos.web;
+package tacos.controller;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import lombok.extern.slf4j.Slf4j;
-import tacos.TacoOrder;
+import tacos.model.TacoOrder;
 
 @Slf4j
 @Controller

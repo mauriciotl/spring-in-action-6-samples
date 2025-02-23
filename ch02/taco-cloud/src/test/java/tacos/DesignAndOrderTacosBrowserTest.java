@@ -17,8 +17,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import tacos.spring.main.TacoCloudApplication;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+//@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = TacoCloudApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT) // Explicitly specify the main class
+
 public class DesignAndOrderTacosBrowserTest {
   
   private static HtmlUnitDriver browser;

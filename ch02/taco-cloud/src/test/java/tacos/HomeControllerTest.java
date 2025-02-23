@@ -8,10 +8,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import tacos.spring.main.TacoCloudApplication;
 
-@WebMvcTest   // <1>
+//@WebMvcTest (HomeControllerTest.class)  // <1>
+@SpringBootTest(classes = TacoCloudApplication.class)
+@AutoConfigureMockMvc
 public class HomeControllerTest {
 
   @Autowired

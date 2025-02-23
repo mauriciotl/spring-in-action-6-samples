@@ -25,7 +25,13 @@ public class TacoOrder {
   @NotBlank(message="Zip code is required")
   private String deliveryZip;
 
-//  @CreditCardNumber(message="Not a valid credit card number")
+  /*
+  Visa-like: 4111111111111111
+  Mastercard-like: 5555555555554444
+  American Express-like: 378282246310005 (15 digits)
+   */
+
+  @CreditCardNumber(message="Not a valid credit card number")
   private String ccNumber;
 
   @Pattern(regexp="^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$",

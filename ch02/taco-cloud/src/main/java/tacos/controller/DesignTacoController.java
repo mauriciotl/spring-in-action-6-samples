@@ -37,6 +37,8 @@ public class DesignTacoController {
     Annotated with @ModelAttribute, this method is called before every request handler method in the controller.
     It populates the Model object with a list of ingredients, categorized by their type (e.g., WRAP, PROTEIN, VEGGIES, etc.).
     The ingredients are added to the model as attributes, making them available to the view (e.g., a Thymeleaf template).
+      In other words: Adds filtered lists of ingredients to the Model (e.g., wrap, protein, etc.).
+                      The full ingredients list is not added to the model unless explicitly done so
      */
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
@@ -55,14 +57,20 @@ public class DesignTacoController {
 
         Type[] types = Ingredient.Type.values();
 
+        /*
+        El siguiente for regresará varias listas, en este caso 5 listas (wrap, protein,
+        veggies, cheese, sauce), cada lista contendrá los ingredientes correspondientes
+        a cada tipo de ingredientes. NO ES UN SORT JEJEJE.
+         */
         for (Type type : types) {
+            System.out.println("======= type: " + type.toString().toLowerCase());
             model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
         }
     }
 
     /*
     Annotated with @ModelAttribute(name = "tacoOrder"), this method creates and returns a new TacoOrder object.
-    The TacoOrder object is added to the model and session, allowing it to be shared across multiple requests.
+    The TacoOrder object is added to the model and session (@SessionAttributes("tacoOrder")), allowing it to be shared across multiple requests.
     */
     @ModelAttribute(name = "tacoOrder")
     public TacoOrder order() {
@@ -96,8 +104,7 @@ If there are no errors, the Taco object is added to the TacoOrder object, and th
 /orders/current URL to proceed with the order.
      */
     @PostMapping
-    public String processTaco(
-            @Valid Taco taco, Errors errors,
+    public String processTaco( @Valid Taco taco, Errors errors,
             @ModelAttribute TacoOrder tacoOrder) {
 
         if (errors.hasErrors()) {
@@ -114,9 +121,12 @@ If there are no errors, the Taco object is added to the TacoOrder object, and th
     /*
     A helper method that filters a list of ingredients by their type (e.g., WRAP, PROTEIN, etc.).
     Used in the addIngredientsToModel method to categorize ingredients for the view.
+    MAU NOTE. Es decir que regresará una lista llena de ingredientes
+     del tipo espefico de type que se le especifíque
+    en el parametro Type type.
     */
-    private Iterable<Ingredient> filterByType(
-            List<Ingredient> ingredients, Type type) {
+    private Iterable<Ingredient> filterByType(List<Ingredient> ingredients, Type type)
+    {
         return ingredients
                 .stream()
                 .filter(x -> x.getType().equals(type))

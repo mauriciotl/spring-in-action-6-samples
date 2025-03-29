@@ -16,12 +16,21 @@
 	<name>tacocloud-ui</name>
 	<description>Taco Cloud UI</description>
 
+<!--  <properties>-->
+<!--      <node.version>v6.9.1</node.version>-->
+<!--      <yarn.version>v0.24.6</yarn.version>-->
+<!--      <frontend-maven-plugin.version>1.4</frontend-maven-plugin.version>-->
+<!--      <environment>dev</environment>-->
+<!--  </properties>-->
+
   <properties>
-      <node.version>v6.9.1</node.version>
-      <yarn.version>v0.24.6</yarn.version>
-      <frontend-maven-plugin.version>1.4</frontend-maven-plugin.version>
-      <environment>dev</environment>
+<!--    <node.version>v18.18.0</node.version>-->
+    <node.version>v14.21.3</node.version>
+    <npm.version>9.8.1</npm.version> <!-- Explicitly specify npm version -->
+    <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
+    <environment>dev</environment>
   </properties>
+
 
   <build>
     <resources>

@@ -12,7 +12,7 @@ import tacos.TacoOrder;
 @Service
 public class JmsOrderMessagingService implements OrderMessagingService {
 
-  private JmsTemplate jms;
+  private final JmsTemplate jms;
 
   @Autowired
   public JmsOrderMessagingService(JmsTemplate jms) {

@@ -16,17 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tacos.TacoOrder;
 import tacos.data.OrderRepository;
+import tacos.messaging.OrderMessagingService;
 
 @RestController
 @RequestMapping(path="/api/orders",
-                produces="application/json")
+        produces="application/json")
+//@CrossOrigin(origins="http://localhost:8080")
 @CrossOrigin(origins="http://tacocloud:8080")
 public class OrderApiController {
 
-  private OrderRepository repo;
+  private final OrderRepository repo;
+  private final OrderMessagingService messageService;
 
-  public OrderApiController(OrderRepository repo) {
+  public OrderApiController(
+          OrderRepository repo,
+          OrderMessagingService messageService) {
     this.repo = repo;
+    this.messageService = messageService;
   }
 
   @GetMapping(produces="application/json")
@@ -37,20 +43,21 @@ public class OrderApiController {
   @PostMapping(consumes="application/json")
   @ResponseStatus(HttpStatus.CREATED)
   public TacoOrder postOrder(@RequestBody TacoOrder order) {
+    messageService.sendOrder(order);
     return repo.save(order);
   }
 
   @PutMapping(path="/{orderId}", consumes="application/json")
   public TacoOrder putOrder(
-                        @PathVariable("orderId") Long orderId,
-                        @RequestBody TacoOrder order) {
+          @PathVariable("orderId") Long orderId,
+          @RequestBody TacoOrder order) {
     order.setId(orderId);
     return repo.save(order);
   }
 
   @PatchMapping(path="/{orderId}", consumes="application/json")
   public TacoOrder patchOrder(@PathVariable("orderId") Long orderId,
-                          @RequestBody TacoOrder patch) {
+                              @RequestBody TacoOrder patch) {
 
     TacoOrder order = repo.findById(orderId).get();
     if (patch.getDeliveryName() != null) {
@@ -66,7 +73,7 @@ public class OrderApiController {
       order.setDeliveryState(patch.getDeliveryState());
     }
     if (patch.getDeliveryZip() != null) {
-      order.setDeliveryZip(patch.getDeliveryZip());
+      order.setDeliveryZip(patch.getDeliveryState());
     }
     if (patch.getCcNumber() != null) {
       order.setCcNumber(patch.getCcNumber());

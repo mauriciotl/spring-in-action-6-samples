@@ -1,10 +1,27 @@
-#tag::portNineThousand[]
 server:
   port: 9000
-#end::portNineThousand[]
 
 management:
   endpoints:
     web:
       exposure:
         include: '*'
+logging:
+  level:
+    # OAuth2 Authorization Server detailed logging
+    org.springframework.security.oauth2.server.authorization: TRACE
+    org.springframework.security.oauth2.server.authorization.authentication: TRACE
+    org.springframework.security.oauth2.server.authorization.client: TRACE
+    org.springframework.security.oauth2.server.authorization.web: TRACE
+    # OAuth2 Core logging
+#    org.springframework.security.oauth2: DEBUG
+    org.springframework.security.oauth2: TRACE
+    # Spring Security general logging
+#    org.springframework.security: DEBUG
+    org.springframework.security: TRACE
+    # Web layer
+    org.springframework.web: DEBUG
+    # Your app
+    tacos.authorization: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

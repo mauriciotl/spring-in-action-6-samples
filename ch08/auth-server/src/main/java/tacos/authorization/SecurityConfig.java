@@ -1,5 +1,6 @@
 package tacos.authorization;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.
               HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.
@@ -14,18 +15,46 @@ import tacos.authorization.users.UserRepository;
 @EnableWebSecurity
 public class SecurityConfig {
 
+//	@Bean
+//	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
+//	        throws Exception {
+//		return http
+//			.authorizeRequests(authorizeRequests ->
+//				authorizeRequests.anyRequest().authenticated()
+//			)
+//
+//			.formLogin()
+//
+//			.and().build();
+//	}
+
+
+//	@Bean
+//	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+//		http
+//				.authorizeRequests(authorize -> authorize
+//						.antMatchers("/oauth2/**").permitAll()
+//						.anyRequest().authenticated()
+//				)
+//				.formLogin(Customizer.withDefaults());
+//		return http.build();
+//	}
+
+
+
 	@Bean
-	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
-	        throws Exception {
-		return http
-			.authorizeRequests(authorizeRequests ->
-				authorizeRequests.anyRequest().authenticated()
-			)
+	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+		http
+				.authorizeRequests(authorize -> authorize
+						.antMatchers("/oauth2/authorize", "/oauth2/token", "/login", "/error").permitAll()
+						.anyRequest().authenticated()
+				)
+				.formLogin(form -> form.loginPage("/login").permitAll());
 
-			.formLogin()
-
-			.and().build();
+		return http.build();
 	}
+
+
 
 	@Bean
 	UserDetailsService userDetailsService(UserRepository userRepo) {

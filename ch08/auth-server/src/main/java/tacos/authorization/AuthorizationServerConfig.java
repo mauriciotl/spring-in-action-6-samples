@@ -36,43 +36,74 @@ import com.nimbusds.jose.proc.SecurityContext;
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfig {
 
+//  @Bean
+//  @Order(Ordered.HIGHEST_PRECEDENCE)
+//  public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
+//    OAuth2AuthorizationServerConfiguration
+//        .applyDefaultSecurity(http);
+//    return http
+//        .formLogin(Customizer.withDefaults())
+//        .build();
+//  }
+
   @Bean
   @Order(Ordered.HIGHEST_PRECEDENCE)
   public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
-    OAuth2AuthorizationServerConfiguration
-        .applyDefaultSecurity(http);
-    return http
-        .formLogin(Customizer.withDefaults())
-        .build();
+    OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+    // disable CSRF for testing (optional)
+    http.csrf(csrf -> csrf.disable());
+    http.formLogin(Customizer.withDefaults());
+    return http.build();
   }
 
-  // @formatter:off
+//  @Bean
+//  public RegisteredClientRepository registeredClientRepository(
+//          PasswordEncoder passwordEncoder) {
+//    RegisteredClient registeredClient =
+//      RegisteredClient.withId(UUID.randomUUID().toString())
+//        .clientId("taco-admin-client")
+//        .clientSecret(passwordEncoder.encode("secret"))
+//        .clientAuthenticationMethod(
+//                ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+//        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+//        .redirectUri(
+//            "http://127.0.0.1:9090/login/oauth2/code/taco-admin-client")
+//        .scope("writeIngredients")
+//        .scope("deleteIngredients")
+//        .scope(OidcScopes.OPENID)
+//        .clientSettings(
+//            clientSettings -> clientSettings.requireUserConsent(true))
+//        .build();
+//    return new InMemoryRegisteredClientRepository(registeredClient);
+//  }
+
+
   @Bean
-  public RegisteredClientRepository registeredClientRepository(
-          PasswordEncoder passwordEncoder) {
-    RegisteredClient registeredClient =
-      RegisteredClient.withId(UUID.randomUUID().toString())
-        .clientId("taco-admin-client")
-        .clientSecret(passwordEncoder.encode("secret"))
-        .clientAuthenticationMethod(
-                ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-        .redirectUri(
-            "http://127.0.0.1:9090/login/oauth2/code/taco-admin-client")
-        .scope("writeIngredients")
-        .scope("deleteIngredients")
-        .scope(OidcScopes.OPENID)
-        .clientSettings(
-            clientSettings -> clientSettings.requireUserConsent(true))
-        .build();
+  public RegisteredClientRepository registeredClientRepository() {
+    RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
+            .clientId("taco-admin-client")
+            .clientSecret("{noop}secret") // <-- no password encoding
+            .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+            .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+            .redirectUri("http://127.0.0.1:9090/login/oauth2/code/taco-admin-client")
+            .scope("writeIngredients")
+            .scope("deleteIngredients")
+//            .scope(OidcScopes.OPENID)
+            .clientSettings(clientSettings -> clientSettings.requireUserConsent(false))
+            .build();
+
     return new InMemoryRegisteredClientRepository(registeredClient);
   }
-  // @formatter:on
+
+
 
   @Bean
   public ProviderSettings providerSettings() {
-    return new ProviderSettings().issuer("http://authserver:9000");
+//    return new ProviderSettings().issuer("http://authserver:9000");
+//    return new ProviderSettings().issuer("http://localhost:9000");
+    return new ProviderSettings().issuer("http://127.0.0.1:9000");
   }
 
   @Bean

@@ -36,6 +36,7 @@ public class OrderController {
     }
 
     orderRepo.save(order);
+    System.out.println("=======The following order has been saved: " + order);
     sessionStatus.setComplete();
 
     return "redirect:/";

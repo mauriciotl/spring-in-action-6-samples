@@ -1,0 +1,35 @@
+
+If you don’t already have a Cassandra cluster to work with, you can start a single- node cluster for development purposes using Docker like this:
+
+docker network create cassandra-net
+
+docker run --name my-cassandra \
+             --network cassandra-net \
+             -p 9042:9042 \
+             -d cassandra:latest
+
+
+Using the Cassandra CQL (Cassandra Query Language) shell, you can cre- ate a keyspace for the Taco Cloud application. You can start the CQL shell using Docker like this:
+
+
+docker run -it --network cassandra-net --rm cassandra cqlsh my-cassandra
+
+
+
+NOTE If this command fails to start up the CQL shell with an error indicating “Unable to connect to any servers,” wait a minute or two and try again. You need to be sure that the Cassandra cluster is fully started before the CQL shell can connect to it.
+
+
+When the shell is ready, use the create keyspace command like this:
+
+cqlsh> create keyspace tacocloud
+   ... with replication={'class':'SimpleStrategy', 'replication_factor':1}
+   ... and durable_writes=true;
+
+Need to update in the application.yml to the following in order to map to the previous keyspace declaration (tacocloud instead of taco-cloud):
+
+spring:
+  data:
+    cassandra:
+      keyspace-name: tacocloud
+      schema-action: recreate
+      local-datacenter: datacenter1

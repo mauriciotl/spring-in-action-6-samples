@@ -73,7 +73,7 @@ public class DesignTacoController {
     }
 
     tacoOrder.addTaco(new TacoUDT(taco.getName(), taco.getIngredients()));
-
+    System.out.println("The following tavo has been added to TacoOrder: " + taco);
     return "redirect:/orders/current";
   }
 

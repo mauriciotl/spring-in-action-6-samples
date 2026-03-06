@@ -36,6 +36,7 @@ public class OrderController {
     }
 
     orderRepo.save(order);
+    System.out.println("The Following order has been saved to Mongo embeded db: " + order);
     sessionStatus.setComplete();
 
     return "redirect:/";

@@ -26,22 +26,35 @@ public class OrderController {
     this.orderRepo = orderRepo;
   }
 
+//  @ModelAttribute(name = "order")
+//  public TacoOrder order() {
+//    return new TacoOrder();
+//  }
+
+
   @GetMapping("/current")
   public String orderForm(@AuthenticationPrincipal User user,
-      @ModelAttribute TacoOrder order) {
-    if (order.getDeliveryName() == null) {
+      @ModelAttribute("order") TacoOrder order) {
+
+    System.out.println("=== User fullname  : " + user.getFullname());
+    System.out.println("=== User street    : " + user.getStreet());
+
+
+    if (order.getDeliveryName() == null  || order.getDeliveryName().isBlank()) {
       order.setDeliveryName(user.getFullname());
+      System.out.println("=== Setting deliveryName to: " + user.getFullname());
     }
-    if (order.getDeliveryStreet() == null) {
+    if (order.getDeliveryStreet() == null || order.getDeliveryStreet().isBlank()) {
       order.setDeliveryStreet(user.getStreet());
+      System.out.println("=== Setting street to: " + user.getStreet());
     }
-    if (order.getDeliveryCity() == null) {
+    if (order.getDeliveryCity() == null || order.getDeliveryCity().isBlank()) {
       order.setDeliveryCity(user.getCity());
     }
-    if (order.getDeliveryState() == null) {
+    if (order.getDeliveryState() == null || order.getDeliveryState().isBlank()) {
       order.setDeliveryState(user.getState());
     }
-    if (order.getDeliveryZip() == null) {
+    if (order.getDeliveryZip() == null || order.getDeliveryZip().isBlank()) {
       order.setDeliveryZip(user.getZip());
     }
 

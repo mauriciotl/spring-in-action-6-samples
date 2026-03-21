@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.
                                        UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import tacos.User;
 import tacos.data.UserRepository;
+import tacos.domainEntity.User;
 
 @Service
 public class UserRepositoryUserDetailsService 

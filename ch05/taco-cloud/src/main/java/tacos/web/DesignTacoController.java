@@ -18,11 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import lombok.extern.slf4j.Slf4j;
-import tacos.Ingredient;
-import tacos.Ingredient.Type;
-import tacos.TacoOrder;
-import tacos.Taco;
-import tacos.User;
+import tacos.domainEntity.*;
 import tacos.data.IngredientRepository;
 import tacos.data.TacoRepository;
 import tacos.data.UserRepository;
@@ -54,8 +50,8 @@ public class DesignTacoController {
     List<Ingredient> ingredients = new ArrayList<>();
     ingredientRepo.findAll().forEach(i -> ingredients.add(i));
 
-    Type[] types = Ingredient.Type.values();
-    for (Type type : types) {
+    Ingredient.Type[] types = Ingredient.Type.values();
+    for (Ingredient.Type type : types) {
       model.addAttribute(type.toString().toLowerCase(),
           filterByType(ingredients, type));
     }
@@ -101,7 +97,7 @@ public class DesignTacoController {
   }
 
   private List<Ingredient> filterByType(
-      List<Ingredient> ingredients, Type type) {
+      List<Ingredient> ingredients, Ingredient.Type type) {
     return ingredients
               .stream()
               .filter(x -> x.getType().equals(type))

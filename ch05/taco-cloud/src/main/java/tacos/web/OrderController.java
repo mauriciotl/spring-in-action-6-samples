@@ -1,6 +1,7 @@
 package tacos.web;
 import javax.validation.Valid;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -11,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import tacos.TacoOrder;
-import tacos.User;
+import tacos.domainEntity.*;
 import tacos.data.OrderRepository;
 
 @Controller
 @RequestMapping("/orders")
 @SessionAttributes("order")
+@Slf4j
 public class OrderController {
 
   private OrderRepository orderRepo;
@@ -73,6 +74,8 @@ public class OrderController {
     order.setUser(user);
 
     orderRepo.save(order);
+
+    log.info("   --- The order has been saved");
     sessionStatus.setComplete();
 
     return "redirect:/";

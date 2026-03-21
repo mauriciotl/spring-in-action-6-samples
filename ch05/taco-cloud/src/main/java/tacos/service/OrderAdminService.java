@@ -1,4 +1,4 @@
-package tacos.data.service;
+package tacos.service;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;

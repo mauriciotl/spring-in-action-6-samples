@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import tacos.data.service.OrderAdminService;
+import tacos.service.OrderAdminService;
 
 @Controller
 @RequestMapping("/admin")

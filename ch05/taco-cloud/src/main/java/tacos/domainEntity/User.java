@@ -1,4 +1,4 @@
-package tacos;
+package tacos.domainEntity;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.persistence.Entity;

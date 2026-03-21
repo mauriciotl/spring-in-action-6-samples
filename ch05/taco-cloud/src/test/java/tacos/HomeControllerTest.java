@@ -19,7 +19,7 @@ import tacos.data.IngredientRepository;
 import tacos.data.OrderRepository;
 import tacos.data.TacoRepository;
 import tacos.data.UserRepository;
-import tacos.data.service.OrderAdminService;
+import tacos.service.OrderAdminService;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest

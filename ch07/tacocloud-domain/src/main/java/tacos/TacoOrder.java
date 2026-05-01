@@ -51,6 +51,8 @@ public class TacoOrder implements Serializable {
   @NotBlank(message="Zip code is required")
   private String deliveryZip;
 
+  //Mock Card Number: 4111 1111 1111 1111
+
   @CreditCardNumber(message="Not a valid credit card number")
   private String ccNumber;
 

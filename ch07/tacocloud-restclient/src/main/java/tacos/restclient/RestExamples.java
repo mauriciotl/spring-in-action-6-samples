@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.annotation.Order;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.client.Traverson;
 import org.springframework.web.client.RestTemplate;
@@ -22,11 +23,13 @@ import tacos.Taco;
 public class RestExamples {
 
   public static void main(String[] args) {
+
     SpringApplication.run(RestExamples.class, args);
   }
 
   @Bean
   public RestTemplate restTemplate() {
+
     return new RestTemplate();
   }
 
@@ -58,6 +61,7 @@ public class RestExamples {
   }
 
   @Bean
+  @Order(1)
   public CommandLineRunner addAnIngredient(TacoCloudClient tacoCloudClient) {
     return args -> {
       log.info("----------------------- POST -------------------------");
@@ -75,32 +79,33 @@ public class RestExamples {
 
 
   @Bean
+  @Order(2)
   public CommandLineRunner deleteAnIngredient(TacoCloudClient tacoCloudClient) {
     return args -> {
       log.info("----------------------- DELETE -------------------------");
-      // start by adding a few ingredients so that we can delete them later...
-      Ingredient beefFajita = new Ingredient("BFFJ", "Beef Fajita", Ingredient.Type.PROTEIN);
-      tacoCloudClient.createIngredient(beefFajita);
-      Ingredient shrimp = new Ingredient("SHMP", "Shrimp", Ingredient.Type.PROTEIN);
-      tacoCloudClient.createIngredient(shrimp);
 
+      // Setup: Ensure these exist before trying to delete
+      tacoCloudClient.createIngredient(new Ingredient("BFFJ", "Beef Fajita", Ingredient.Type.PROTEIN));
+      tacoCloudClient.createIngredient(new Ingredient("SHMP", "Shrimp", Ingredient.Type.PROTEIN));
 
-      Ingredient before = tacoCloudClient.getIngredientById("CHIX");
-      log.info("BEFORE:  " + before);
-      tacoCloudClient.deleteIngredient(before);
-      Ingredient after = tacoCloudClient.getIngredientById("CHIX");
-      log.info("AFTER:  " + after);
-      before = tacoCloudClient.getIngredientById("BFFJ");
-      log.info("BEFORE:  " + before);
-      tacoCloudClient.deleteIngredient(before);
-      after = tacoCloudClient.getIngredientById("BFFJ");
-      log.info("AFTER:  " + after);
-      before = tacoCloudClient.getIngredientById("SHMP");
-      log.info("BEFORE:  " + before);
-      tacoCloudClient.deleteIngredient(before);
-      after = tacoCloudClient.getIngredientById("SHMP");
-      log.info("AFTER:  " + after);
+      // Process deletions
+      deleteAndLog(tacoCloudClient, "CHIX");
+      deleteAndLog(tacoCloudClient, "BFFJ");
+      deleteAndLog(tacoCloudClient, "SHMP");
     };
+  }
+
+  private void deleteAndLog(TacoCloudClient client, String id) {
+    Ingredient before = client.getIngredientById(id);
+    log.info("BEFORE: " + before);
+
+    if (before != null) {
+      client.deleteIngredient(before);
+      Ingredient after = client.getIngredientById(id);
+      log.info("AFTER:  " + after);
+    } else {
+      log.warn("Cannot delete: Ingredient " + id + " not found.");
+    }
   }
 
   //

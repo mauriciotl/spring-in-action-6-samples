@@ -7,7 +7,9 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.client.Traverson;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +35,23 @@ public class TacoCloudClient {
   /*
    * Specify parameter as varargs argument
    */
+//  public Ingredient getIngredientById(String ingredientId) {
+//    return rest.getForObject("http://localhost:8080/api/ingredients/{id}",
+//                             Ingredient.class, ingredientId);
+//  }
+
   public Ingredient getIngredientById(String ingredientId) {
-    return rest.getForObject("http://localhost:8080/ingredients/{id}",
-                             Ingredient.class, ingredientId);
+    try {
+      ResponseEntity<Ingredient> response = rest.getForEntity(
+              "http://localhost:8080/api/ingredients/{id}",
+              Ingredient.class,
+              ingredientId
+      );
+      return response.getBody();
+    } catch (HttpClientErrorException.NotFound e) {
+      // Return null if 404, so your logic knows it doesn't exist
+      return null;
+    }
   }
 
   /*
@@ -87,17 +103,16 @@ public class TacoCloudClient {
   */
 
   public List<Ingredient> getAllIngredients() {
-    return rest.exchange("http://localhost:8080/ingredients",
+    return rest.exchange("http://localhost:8080/api/ingredients",
             HttpMethod.GET, null, new ParameterizedTypeReference<List<Ingredient>>() {})
         .getBody();
   }
-
   //
   // PUT examples
   //
 
   public void updateIngredient(Ingredient ingredient) {
-    rest.put("http://localhost:8080/ingredients/{id}",
+    rest.put("http://localhost:8080/api/ingredients/{id}",
           ingredient, ingredient.getId());
   }
 
@@ -105,7 +120,7 @@ public class TacoCloudClient {
   // POST examples
   //
   public Ingredient createIngredient(Ingredient ingredient) {
-    return rest.postForObject("http://localhost:8080/ingredients",
+    return rest.postForObject("http://localhost:8080/api/ingredients",
         ingredient, Ingredient.class);
   }
 
@@ -140,7 +155,7 @@ public class TacoCloudClient {
   //
 
   public void deleteIngredient(Ingredient ingredient) {
-    rest.delete("http://localhost:8080/ingredients/{id}",
+    rest.delete("http://localhost:8080/api/ingredients/{id}",
         ingredient.getId());
   }
 

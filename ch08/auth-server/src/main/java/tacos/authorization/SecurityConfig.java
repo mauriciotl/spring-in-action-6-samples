@@ -1,39 +1,38 @@
 package tacos.authorization;
+
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.web.builders.
-              HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.
-              EnableWebSecurity;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
 import tacos.authorization.users.UserRepository;
 
+@Configuration // Added @Configuration for clarity
 @EnableWebSecurity
 public class SecurityConfig {
 
 	@Bean
-	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
-	        throws Exception {
+	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		return http
-			.authorizeRequests(authorizeRequests ->
-				authorizeRequests.anyRequest().authenticated()
-			)
-
-			.formLogin()
-
-			.and().build();
+				.authorizeHttpRequests(authorize -> authorize
+						.anyRequest().authenticated()
+				)
+				.formLogin(Customizer.withDefaults()) // New standard syntax
+				.build();
 	}
 
 	@Bean
-	UserDetailsService userDetailsService(UserRepository userRepo) {
-	  return username -> userRepo.findByUsername(username);
+	public UserDetailsService userDetailsService(UserRepository userRepo) {
+		// Ensure userRepo.findByUsername returns a class that implements UserDetails
+		return username -> userRepo.findByUsername(username);
 	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-	  return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder();
 	}
 }

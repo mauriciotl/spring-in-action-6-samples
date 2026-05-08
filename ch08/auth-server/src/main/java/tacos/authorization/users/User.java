@@ -3,11 +3,7 @@ package tacos.authorization.users;
 import java.util.Collection;
 import java.util.Collections;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import jakarta.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,8 +16,9 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
+@Table(name = "users") // Use a safe name
 @RequiredArgsConstructor
-@NoArgsConstructor(force=true, access=AccessLevel.PRIVATE)
+@NoArgsConstructor(force=true, access=AccessLevel.PROTECTED)
 public class User implements UserDetails {
 
   private static final long serialVersionUID = 1L;
@@ -33,7 +30,7 @@ public class User implements UserDetails {
   private final String username;
   private final String password;
   private final String role;
-  
+
   @Override
   @Transient
   public Collection<? extends GrantedAuthority> getAuthorities() {

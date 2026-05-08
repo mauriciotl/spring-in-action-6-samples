@@ -5,7 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import tacos.authorization.users.User;
 import tacos.authorization.users.UserRepository;
 
@@ -17,14 +16,11 @@ public class AuthServerApplication {
   }
 
   @Bean
-  public ApplicationRunner dataLoader(
-          UserRepository repo, PasswordEncoder encoder) {
+  public ApplicationRunner dataLoader(UserRepository repo, PasswordEncoder encoder) {
     return args -> {
-      repo.save(
-          new User("habuma", encoder.encode("password"), "ROLE_ADMIN"));
-      repo.save(
-          new User("tacochef", encoder.encode("password"), "ROLE_ADMIN"));
+      repo.save(new User("habuma", encoder.encode("password"), "ROLE_ADMIN"));
+      repo.save(new User("tacochef", encoder.encode("password"), "ROLE_ADMIN"));
+      repo.save(new User("mau", encoder.encode("mau"), "ROLE_ADMIN"));
     };
   }
-
 }

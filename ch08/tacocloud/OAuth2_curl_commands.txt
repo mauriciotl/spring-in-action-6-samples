@@ -1,0 +1,127 @@
+Testing the token in:
+
+https://www.jwt.io/
+
+
+Example of command from the book, some of them may have been updated.
+
+
+############################################
+Request from client:
+############################################
+
+-- From the Spring in Action Book: ---
+
+http://localhost:9000/oauth2/authorize?response_type=code&client_id=taco-admin-client&redirect_uri=http://127.0.0.1:9090/login/oauth2/code/taco-admin-client&scope=writeIngredients+deleteIngredients
+
+
+
+############################################
+Respose from browser:
+############################################
+
+
+
+http://127.0.0.1:9090/login/oauth2/code/taco-admin-client?code=RWZe9P_YAa9WNUaw6R2Ps2zhN-qdd2jfkn64Psi4pjsD6Xd0X9PeexQK6mzcsC8nJgfXgIxAjlGWtKD7LnzAF2WBLvEtMNnfdMudXC01B5c3JUlrI-oSq90ZpmdzB35w
+
+
+############################################
+Command to change code for token:
+############################################
+
+Option A – Basic Auth Header (recommended)
+
+
+curl -X POST http://localhost:9000/oauth2/token \
+  -u "taco-admin-client:secret" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=authorization_code" \
+  -d "redirect_uri=http://127.0.0.1:9090/login/oauth2/code/taco-admin-client" \
+  -d "code=RWZe9P_YAa9WNUaw6R2Ps2zhN-qdd2jfkn64Psi4pjsD6Xd0X9PeexQK6mzcsC8nJgfXgIxAjlGWtKD7LnzAF2WBLvEtMNnfdMudXC01B5c3JUlrI-oSq90ZpmdzB35w"
+
+
+############################################
+Respose from browser, I'm including previous command, now it provides the token
+############################################
+
+
+zsh_$ curl -X POST http://localhost:9000/oauth2/token \
+  -u "taco-admin-client:secret" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=authorization_code" \
+  -d "redirect_uri=http://127.0.0.1:9090/login/oauth2/code/taco-admin-client" \
+  -d "code=RWZe9P_YAa9WNUaw6R2Ps2zhN-qdd2jfkn64Psi4pjsD6Xd0X9PeexQK6mzcsC8nJgfXgIxAjlGWtKD7LnzAF2WBLvEtMNnfdMudXC01B5c3JUlrI-oSq90ZpmdzB35w"
+{"access_token":"eyJraWQiOiJmMTBiNDZlMS04ZmY4LTRmNmMtODBjOS1mZTIzNDBmMzIxODIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtYXUiLCJhdWQiOiJ0YWNvLWFkbWluLWNsaWVudCIsIm5iZiI6MTc3OTE0ODEwOCwic2NvcGUiOlsiZGVsZXRlSW5ncmVkaWVudHMiLCJ3cml0ZUluZ3JlZGllbnRzIl0sImlzcyI6Imh0dHA6Ly9hdXRoc2VydmVyOjkwMDAiLCJleHAiOjE3NzkxNDg0MDgsImlhdCI6MTc3OTE0ODEwOCwianRpIjoiZmZkNmE2Y2ItZGMwMC00NjNmLTg2MDktOWVlZDFmMWUyYTFhIn0.LU32xeTsKddc3zukkJMdIs78dnWMP1mgZs8yOmcMCoeE2_jEpeLEYEQqU507OY-WSQSWqESLA_bSdYaDTX2vIwtLE2N5ogsCNvKXNqQUu15lW0xkTV4R7aRggaMfcPhUkbfH1IRjQqTrzWT8X6_cSII6_SuTGY0Jn9ebOFIih9X-Z0WCP7HohKGvkeYjghhhgQeK0A_wf1_C7zMdcbSjaU32gFTYoYTTAuULJ17Kln3nm0jdvVNphu28NjjW16ZeUtPGB5A6xfVcmjl4TkUrrNRBwWo7Tl-_8SUsle-CpxLOb-pVdYNNwuut09XJqCwMo5f5psnFo9nlMbwu9pfr8Q","refresh_token":"L-wECBph5vhfgLeqwScI-w7XWEcrDHYLaOfzJEPs4KpKqrNcoUsNY6SBQt7muu4mFF1TlIzLbZXwJKqA_WYDsAyyP_oi7_S-XzyJS_P8y1xQKKn7Gh8Sadn6MYFgAWf8","scope":"deleteIngredients writeIngredients","token_type":"Bearer","expires_in":299}%
+
+
+
+############################################
+Sending a SIMPLE request to the now secured API. SIMPLE GET **** *** *
+############################################
+
+
+curl -X GET localhost:8080/api/ingredients \
+    -H "Authorization: Bearer eyJraWQiOiJmMTBiNDZlMS04ZmY4LTRmNmMtODBjOS1mZTIzNDBmMzIxODIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtYXUiLCJhdWQiOiJ0YWNvLWFkbWluLWNsaWVudCIsIm5iZiI6MTc3OTE0ODEwOCwic2NvcGUiOlsiZGVsZXRlSW5ncmVkaWVudHMiLCJ3cml0ZUluZ3JlZGllbnRzIl0sImlzcyI6Imh0dHA6Ly9hdXRoc2VydmVyOjkwMDAiLCJleHAiOjE3NzkxNDg0MDgsImlhdCI6MTc3OTE0ODEwOCwianRpIjoiZmZkNmE2Y2ItZGMwMC00NjNmLTg2MDktOWVlZDFmMWUyYTFhIn0.LU32xeTsKddc3zukkJMdIs78dnWMP1mgZs8yOmcMCoeE2_jEpeLEYEQqU507OY-WSQSWqESLA_bSdYaDTX2vIwtLE2N5ogsCNvKXNqQUu15lW0xkTV4R7aRggaMfcPhUkbfH1IRjQqTrzWT8X6_cSII6_SuTGY0Jn9ebOFIih9X-Z0WCP7HohKGvkeYjghhhgQeK0A_wf1_C7zMdcbSjaU32gFTYoYTTAuULJ17Kln3nm0jdvVNphu28NjjW16ZeUtPGB5A6xfVcmjl4TkUrrNRBwWo7Tl-_8SUsle-CpxLOb-pVdYNNwuut09XJqCwMo5f5psnFo9nlMbwu9pfr8Q"
+
+
+
+############################################
+Sending a request (POST) to the now secured API
+############################################
+
+curl localhost:8080/api/ingredients \
+    -H"Content-type: application/json" \
+    -d'{"id":"SHMP", "name":"Coconut Shrimp", "type":"PROTEIN"}' \
+    -H"Authorization: Bearer $token"
+
+
+curl localhost:8080/api/ingredients \
+    -H"Content-type: application/json" \
+    -d'{"id":"MAU02", "name":"MAU TACO el 02", "type":"PROTEIN"}' \
+    -H"Authorization: Bearer eyJraWQiOiJmMTBiNDZlMS04ZmY4LTRmNmMtODBjOS1mZTIzNDBmMzIxODIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtYXUiLCJhdWQiOiJ0YWNvLWFkbWluLWNsaWVudCIsIm5iZiI6MTc3OTE0ODEwOCwic2NvcGUiOlsiZGVsZXRlSW5ncmVkaWVudHMiLCJ3cml0ZUluZ3JlZGllbnRzIl0sImlzcyI6Imh0dHA6Ly9hdXRoc2VydmVyOjkwMDAiLCJleHAiOjE3NzkxNDg0MDgsImlhdCI6MTc3OTE0ODEwOCwianRpIjoiZmZkNmE2Y2ItZGMwMC00NjNmLTg2MDktOWVlZDFmMWUyYTFhIn0.LU32xeTsKddc3zukkJMdIs78dnWMP1mgZs8yOmcMCoeE2_jEpeLEYEQqU507OY-WSQSWqESLA_bSdYaDTX2vIwtLE2N5ogsCNvKXNqQUu15lW0xkTV4R7aRggaMfcPhUkbfH1IRjQqTrzWT8X6_cSII6_SuTGY0Jn9ebOFIih9X-Z0WCP7HohKGvkeYjghhhgQeK0A_wf1_C7zMdcbSjaU32gFTYoYTTAuULJ17Kln3nm0jdvVNphu28NjjW16ZeUtPGB5A6xfVcmjl4TkUrrNRBwWo7Tl-_8SUsle-CpxLOb-pVdYNNwuut09XJqCwMo5f5psnFo9nlMbwu9pfr8Q"
+
+
+
+
+
+
+####################################################################################################################################
+Requesting a new token due to first one has expired
+########################################################################################
+
+
+curl localhost:9000/oauth2/token \
+            -H"Content-type: application/x-www-form-urlencoded" \
+            -d"grant_type=refresh_token&refresh_token=HOzHA5s..." \
+            -u taco-admin-client:secret
+
+
+
+
+curl localhost:9000/oauth2/token \
+            -H"Content-type: application/x-www-form-urlencoded" \
+            -d"grant_type=refresh_token&refresh_token=1AFvgvQpMSMqkK201JiIQj9vMl7TAv7dQArmc8H8cM5Ab4xIMf3uVMhm35x7xpgnuu5vuQ_njlV5biHvIfCE7h_8G6qkHZ7AHU--bDzMXAfvemRegB1nsvWGvmP7Dz78" \
+            -u taco-admin-client:secret
+
+
+
+
+
+=============================
+New token
+=====================
+
+
+
+
+
+zsh_$ curl localhost:9000/oauth2/token \
+            -H"Content-type: application/x-www-form-urlencoded" \
+            -d"grant_type=refresh_token&refresh_token=fPxgUS7poXVcoqsZiLzSz2TrR2bAkJr5Z47sjCqG77CPjeWEgDhS6Lue_imiySSULLs3FC-ENzUWC5MmXN4wTD8hE48O0DL1Co5tI_PLR5fdh7Y_V8R7-JPT5H2ZRNgB" \
+            -u taco-admin-client:secret
+{"access_token":"eyJraWQiOiJjMzE3Y2UyMy01Y2UxLTQ1ZDQtOTA4Zi0zYmFkNWFlOGI4NDUiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtYXUiLCJhdWQiOiJ0YWNvLWFkbWluLWNsaWVudCIsIm5iZiI6MTc3ODY0MDE5Nywic2NvcGUiOlsiZGVsZXRlSW5ncmVkaWVudHMiLCJ3cml0ZUluZ3JlZGllbnRzIl0sImlzcyI6Imh0dHA6Ly9hdXRoc2VydmVyOjkwMDAiLCJleHAiOjE3Nzg2NDA0OTcsImlhdCI6MTc3ODY0MDE5NywianRpIjoiZDVhMTA2YTAtY2ZkYi00ODM2LTgxZDEtYjMzYWFjYzc0MDE4In0.CJZjrcl-EfkAYRvL9nfNC0RmxzAW3I2RcfpdWp0cuBQbJt2T55KqCahWq35zmUxlsHasBjAwlOyZShPz9MGGoCw0ifOTqAdwGzlFgvKfYE_7uG0ukg5SHUg7Jz6JKAiJNm5JDTKYLoVAnDZpTheaw-fAae9AZzfrYmBYxeExhht4BKzm60wpR7VaPlBIa0EnXu07ZwIqgjvvXV-ddkd-QQMKnADQqDKQzUFEstwQMhDXMGBaXNaVmyp0O_u0Mq7tlXUCVG7L9HC3qs3XLzvDXxLukXrWhn6G1UfXkTqAgPeSDgIK1VeOsTAw3PNQesOPiUT-EfaAv2ypur3kHrRDjA","refresh_token":"fPxgUS7poXVcoqsZiLzSz2TrR2bAkJr5Z47sjCqG77CPjeWEgDhS6Lue_imiySSULLs3FC-ENzUWC5MmXN4wTD8hE48O0DL1Co5tI_PLR5fdh7Y_V8R7-JPT5H2ZRNgB","scope":"deleteIngredients writeIngredients","token_type":"Bearer","expires_in":299}%                zsh_$
+
+
+
+
+

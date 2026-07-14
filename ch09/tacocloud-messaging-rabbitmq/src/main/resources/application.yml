@@ -1,0 +1,24 @@
+# The values given here are actually the default values. But they are explicitly
+# set here as an example of setting the RabbitMQ properties.
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: tacoweb
+    password: letm31n
+    template:
+      exchange: tacocloud.order.exchange
+      routing-key: tacocloud.order
+
+---
+# None of these properties will actually work as configured for this profile.
+# But it is left here as an example of configuring for a production profile
+# that will override the local configuration in the default profile.
+spring:
+  profiles: production
+
+  rabbitmq:
+    host: rabbitmq.tacocloud.com
+    port: 5672
+    username: tacoweb
+    password: l3tm31n

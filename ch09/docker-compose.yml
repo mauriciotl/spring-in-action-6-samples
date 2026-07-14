@@ -1,0 +1,15 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: tacocloud-rabbitmq
+    ports:
+      - "5672:5672"     # AMQP protocol port — apps connect here
+      - "15672:15672"   # Management UI — http://localhost:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: tacoweb
+      RABBITMQ_DEFAULT_PASS: letm31n
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq-data:

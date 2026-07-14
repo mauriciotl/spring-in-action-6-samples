@@ -1,3 +1,9 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: env
+
 security:
   user:
     name: buzz
@@ -6,8 +12,6 @@ security:
 taco:
   orders:
     pageSize: 10
-
-
   discount:
     codes:
       abcdef: 10
@@ -19,11 +23,15 @@ spring:
   datasource:
     generate-unique-name: false
     name: tacocloud
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: tacoweb
+    password: letm31n
 
 ---
 spring:
   profiles: prod
-
   datasource:
     url: jdbc:mysql://localhost/tacocloud
     username: tacouser

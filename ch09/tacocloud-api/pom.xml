@@ -40,9 +40,19 @@
 			<version>${tacocloud.version}</version>
 		</dependency>
 
+		<!-- The following dependencies should be activated
+		 According to the Asynchronous technology to be applied:
+		  Artemis, RabbitMQ or Kafka-->
+
+<!--		<dependency>-->
+<!--			<groupId>sia</groupId>-->
+<!--			<artifactId>tacocloud-messaging-jms</artifactId>-->
+<!--			<version>${tacocloud.version}</version>-->
+<!--		</dependency>-->
+
 		<dependency>
 			<groupId>sia</groupId>
-			<artifactId>tacocloud-messaging-jms</artifactId>
+			<artifactId>tacocloud-messaging-rabbitmq</artifactId>
 			<version>${tacocloud.version}</version>
 		</dependency>
 
